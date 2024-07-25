@@ -499,6 +499,15 @@ class TDAnalytics
         TDLog::log("SDK close");
     }
 
+    public function __destruct()
+    {
+        try {
+            $this->close();
+        } catch (Exception $ex) {
+            // DO NOTHING
+        }
+    }
+
     /**
      * @return bool get strict status
      */
@@ -586,6 +595,9 @@ class TDFileConsumer extends TDAbstractConsumer
         $this->fileDirectory = $file_directory;
         if (!is_dir($file_directory)) {
             mkdir($file_directory, 0777, true);
+            
+            // https://stackoverflow.com/a/4134765/3651074
+            chmod($file_directory, 0777);
         }
         $this->fileSize = $file_size;
         $this->rotateHourly = $rotate_hourly;
@@ -600,10 +612,16 @@ class TDFileConsumer extends TDAbstractConsumer
 
     public function setLogFilePermission($permission)
     {
-        if (!($permission == 0664 || $permission == 0666)) {
-            $permission = TD_LOG_FILE_DEFAULT_PERMISSION;
-        }
         $this->permission = $permission;
+    }
+
+    private function chmod(string $path, int $permission)
+    {
+        try {
+            chmod($path, $permission);
+        } catch (Exception $ex) {
+            // DO NOTHING
+        }
     }
 
     /**
@@ -635,7 +653,7 @@ class TDFileConsumer extends TDAbstractConsumer
         }
         if ($this->fileHandler === null) {
             $this->fileHandler = fopen($file_name, 'a+');
-            chmod($file_name, $this->permission);
+            $this->chmod($file_name, $this->permission);
         }
         if (flock($this->fileHandler, LOCK_EX)) {
             $flush_cont = count($this->buffers);

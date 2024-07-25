@@ -1,5 +1,5 @@
 {
-  "name": "thinkinggame/ta-php-sdk",
+  "name": "pocketread/ta-php-sdk",
   "type": "library",
   "homepage": "http://www.thinkingdata.cn",
   "description": "PHP SDK for thinkingdata Analytics",
@@ -8,12 +8,6 @@
     "thinkingdata"
   ],
   "license": "MIT",
-  "authors": [
-    {
-      "name": "ThinkingData",
-      "email": "sdk@thinkingdata.cn"
-    }
-  ],
   "require": {
     "php": ">=5.5.0",
     "ext-curl": "*",
