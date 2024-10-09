@@ -594,7 +594,7 @@ class TDFileConsumer extends TDAbstractConsumer
         TDLog::log("File consumer init success. Log_directory:" . $file_directory);
         $this->fileDirectory = $file_directory;
         if (!is_dir($file_directory)) {
-            mkdir($file_directory, 0777, true);
+            @mkdir($file_directory, 0777, true);
             
             // https://stackoverflow.com/a/4134765/3651074
             chmod($file_directory, 0777);
